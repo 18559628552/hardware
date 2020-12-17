@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>用户登录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.css">
+    <link type="text/css" rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/simpleCart.min.js"></script>
+    <script type="text/javascript" src="public.js"></script>
+    <script type="text/javascript" src="js/order.js"></script>
+</head>
+<body>
+<div class="header"></div>
+<!--cart-items-->
+<div class="cart-items">
+    <div class="container">
+
+        <c:if test="${msg!=null}"><div class="alert alert-success">${msg}</div></c:if>
+        <c:if test="${orderList!=null}">
+            <h2>我的订单</h2>
+
+            <table class="table table-bordered table-hover">
+
+                <tr>
+                    <th width="10%">订单号</th>
+                    <th width="10%">总价</th>
+                    <th width="20%">商品详情</th>
+                    <th width="20%">收货信息</th>
+                    <th width="10%">订单状态</th>
+                    <th width="10%">支付方式</th>
+                    <th width="10%">下单时间</th>
+                    <th width="10%">操作</th>
+                </tr>
+                <c:forEach var="order" items="${orderList}">
+                    <tr>
+                        <td><p>${order.id}</p></td>
+                        <td><p>${order.total}</p></td>
+                        <td>
+                            <c:forEach var ="item" items="${order.itemList}">
+                                <p>${item.good.name}(${item.price}) x ${item.amount}</p>
+                            </c:forEach>
+                        </td>
+                        <td>
+                            <p>${order.name}</p>
+                            <p>${order.phone}</p>
+                            <p>${order.address}</p>
+                        </td>
+                        <td>
+                            <p>
+                                <c:if test="${order.status==0}">已下单</c:if>
+                                <c:if test="${order.status==1}">已发货</c:if>
+                                <c:if test="${order.status==2}">未发货</c:if>
+                                <c:if test="${order.status==4}">退货中</c:if>
+                                <c:if test="${order.status==6}">换货中</c:if>
+                                <c:if test="${order.status==7}">订单完成</c:if>
+                            </p>
+                        </td>
+                        <td>
+                            <p>
+                                <c:if test="${order.paytype==1}">微信</c:if>
+                                <c:if test="${order.paytype==2}">支付宝</c:if>
+                                <c:if test="${order.paytype==3}">货到付款</c:if>
+                            </p>
+                        </td>
+                        <td><p><fmt:formatDate value="${order.systime}" pattern="yyyy-MM-dd HH:mm:ss" /></p></td>
+                        <td>
+                            <c:if test="${order.status==1}">
+                                <a class="btn btn-success" href="javascript:returnback()">退货</a>
+                                <a class="btn btn-success" href="javascript:changegoods()">换货</a>
+                                <a class="btn btn-success" href="javascript:check()">确认收货</a>
+                            </c:if>
+                        </td>
+                    </tr>
+                </c:forEach>
+
+            </table>
+
+        </c:if>
+        <c:if test="${orderList==null}"><div class="alert alert-info">空空如也</div></c:if>
+
+    </div>
+</div>
+<!--//cart-items-->
+<div class="footer"></div>
+<script src="js/jquery.min.js"></script>
+<script>
+    $(function(){
+        $(".header").load("header.html");
+        $(".footer").load("footer.html");
+    });
+</script>
+</body>
+</html>
